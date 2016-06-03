@@ -1,0 +1,23 @@
+{
+  "name": "relay",
+  "private": true,
+  "version": "0.0.0",
+  "description": "A pattern for calling ethereum contract functions by sending funds to a proxy contract.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "lint": "standard \"test/**/*.js\"",
+    "test": "truffle test",
+    "watch": "chokidar \"test/**/*.js\" -c \"npm run lint ; npm run test\" & chokidar \"contracts/**/*.sol\" -c \"npm run test\""
+  },
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "chokidar-cli": "^1.2.0",
+    "standard": "^7.0.1",
+    "truffle": "^1.0.3"
+  },
+  "dependencies": {}
+}
