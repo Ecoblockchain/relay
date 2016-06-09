@@ -4,8 +4,8 @@ import './Relay.sol';
 contract MyContract is Relay {
   uint public counter = 0;
 
-  function MyContract() {
-    AddRelay('Count()');
+  function AddCountRelay(address owner) {
+    AddRelay('Count()', owner);
   }
 
   function Count() {
