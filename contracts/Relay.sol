@@ -14,6 +14,13 @@ contract Relay {
   function GetRelay(string methodName, address owner) constant returns (address) {
     return relays[bytes4(sha3(methodName))][owner];
   }
+
+  /** Transfers a relay to a different owner. */
+  function TransferRelay(string methodName, address oldOwner, address newOwner) internal {
+    bytes4 methodId = bytes4(sha3(methodName));
+    Proxy proxy = Proxy(relays[methodId][oldOwner]);
+    proxy.TransferOwner(newOwner);
+  }
 }
 
 /** The Proxy contract represents a single method on a host contract. It stores the address of the host contract and the method id of the method so that it can invoke the method when a user sends funds to this contract's address. Note: This version is permission-less. Most use cases would require an authorized owner contract. */
@@ -32,6 +39,10 @@ contract Proxy {
     host = _host;
     owner = _owner;
     methodId = _methodId;
+  }
+
+  function TransferOwner(address newOwner) {
+    owner = newOwner;
   }
 
   function() {

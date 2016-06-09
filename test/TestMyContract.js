@@ -52,6 +52,25 @@ describe('MyContract', () => {
 
   contract('MyContract', accounts => {
     const user = accounts[1]
+    const other = accounts[2]
+    it('should transfer the relay to a new owner', () => {
+      const myContract = MyContract.deployed()
+      return myContract.AddCountRelay(user)
+        myContract.TransferCountRelay(other)
+        .then(() => myContract.GetRelay.call('Count()', user))
+        .then(result => {
+          const relayAddress = result.valueOf()
+          return myContract.counter.call
+            .then(counter => assert.equal(counter.toNumber(), 0, 'Counter did not start at 0'))
+            .then(() => web3.eth.sendTransaction({ from: other, to: relayAddress }))
+            .then(myContract.counter.call)
+            .then(counter => assert.equal(counter.toNumber(), 1, 'Counter did not increment to 1)'))
+        })
+    })
+  })
+
+  contract('MyContract', accounts => {
+    const user = accounts[1]
     it('should forward sent ether to the host contract', () => {
       const myContract = MyContract.deployed()
       return myContract.AddCountRelay(user)
