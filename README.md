@@ -12,21 +12,28 @@ Downloading a full ethereum node and interacting with a contract via a web3-base
 
 ## Methods
 
-The Relay contract acts as a base contract via inheritance and exposes the following methods:
-
-- `AddRelay(string methodName, address relayOwner)` - Registers the given method as callable via a relay for the given relayOwner. Creates a proxy contract in the background. This is an internal method that is called only from the host contract.
-- `GetRelay(string methodName, address relayOwner)` - Gets the address that can be sent transactions by the relayOwner to call the relay method. This is a public method that the consumer is expected to call to retrieve the dynamic relay address. 
-- `TransferRelay(string methodName, address oldOwner, address newOwner)` - Transfers the owner of the relay. Internal method.
+- `AddRelay(string methodName, address relayOwner)` - Registers the given method as callable via a relay for the given relayOwner. Creates a proxy contract in the background.
+- `GetRelay(string methodName, address relayOwner)` - Gets the address that can be sent transactions by the relayOwner to call the relay method.
+- `TransferRelay(string methodName, address oldOwner, address newOwner)` - Transfers the owner of the relay.
 
 ## Usage
 
 ```js
-contract MyContract is Relay {
+import "relay/contracts/Relay.sol"
+
+contract MyContract {
   uint public counter = 0;
   address relayOwner = 0x3f89a54f3af68c83af5ac5834e735ebd89423cdc;
 
+  using Relay for Relay.Data;
+  Relay.Data relay;
+
   function MyContract() {
-    AddRelay('Count()', relayOwner);
+    relay.AddRelay('Count()', relayOwner);
+  }
+
+  function GetRelay() {
+    relay.GetRelay('Count()', relayOwner);
   }
 
   function Count() {
