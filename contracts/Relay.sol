@@ -1,24 +1,26 @@
 /* The Relay contract serves as a base contract for any contract that wishes to expose methods through relay addresses.*/
-contract Relay {
+library Relay {
 
-  // a mapping of methodId => proxy address
-  mapping (bytes4 => mapping(address => address)) relays;
+  struct Data {
+    // a mapping of methodId => proxy address
+    mapping (bytes4 => mapping(address => address)) relays;
+  }
 
   /** Adds a relay for the given method. */
-  function AddRelay(string methodName, address owner) internal {
+  function AddRelay(Data storage self, string methodName, address owner) {
     bytes4 methodId = bytes4(sha3(methodName));
-    relays[methodId][owner] = address(new Proxy(methodId, this, owner));
+    self.relays[methodId][owner] = address(new Proxy(methodId, this, owner));
   }
 
   /** Retrieves the dynamic contract address that can be sent a transaction to trigger the given method. */
-  function GetRelay(string methodName, address owner) constant returns (address) {
-    return relays[bytes4(sha3(methodName))][owner];
+  function GetRelay(Data storage self, string methodName, address owner) constant returns (address) {
+    return self.relays[bytes4(sha3(methodName))][owner];
   }
 
   /** Transfers a relay to a different owner. */
-  function TransferRelay(string methodName, address oldOwner, address newOwner) internal {
+  function TransferRelay(Data storage self, string methodName, address oldOwner, address newOwner) {
     bytes4 methodId = bytes4(sha3(methodName));
-    Proxy proxy = Proxy(relays[methodId][oldOwner]);
+    Proxy proxy = Proxy(self.relays[methodId][oldOwner]);
     proxy.TransferOwner(newOwner);
   }
 }
