@@ -7,21 +7,21 @@ library Relay {
   }
 
   /** Adds a relay for the given method. */
-  function AddRelay(Data storage self, string methodName, address owner) {
+  function addRelay(Data storage self, string methodName, address owner) {
     bytes4 methodId = bytes4(sha3(methodName));
     self.relays[methodId][owner] = address(new Proxy(methodId, this, owner));
   }
 
   /** Retrieves the dynamic contract address that can be sent a transaction to trigger the given method. */
-  function GetRelay(Data storage self, string methodName, address owner) constant returns (address) {
+  function getRelay(Data storage self, string methodName, address owner) constant returns (address) {
     return self.relays[bytes4(sha3(methodName))][owner];
   }
 
   /** Transfers a relay to a different owner. */
-  function TransferRelay(Data storage self, string methodName, address oldOwner, address newOwner) {
+  function transferRelay(Data storage self, string methodName, address oldOwner, address newOwner) {
     bytes4 methodId = bytes4(sha3(methodName));
     Proxy proxy = Proxy(self.relays[methodId][oldOwner]);
-    proxy.TransferOwner(newOwner);
+    proxy.transferOwner(newOwner);
   }
 }
 
@@ -43,7 +43,7 @@ contract Proxy {
     methodId = _methodId;
   }
 
-  function TransferOwner(address newOwner) {
+  function transferOwner(address newOwner) {
     owner = newOwner;
   }
 

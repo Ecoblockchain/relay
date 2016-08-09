@@ -8,20 +8,20 @@ contract MyContract {
   using Relay for Relay.Data;
   Relay.Data relay;
 
-  function AddCountRelay(address owner) {
+  function addCountRelay(address owner) {
     relayOwner = owner;
-    relay.AddRelay('Count()', owner);
+    relay.addRelay('count()', owner);
   }
 
-  function GetRelay(string methodName, address owner) constant returns (address) {
-    return relay.GetRelay(methodName, owner);
+  function getRelay(string methodName, address owner) constant returns (address) {
+    return relay.getRelay(methodName, owner);
   }
 
-  function TransferCountRelay(address newOwner) {
-    relay.TransferRelay('Count()', relayOwner, newOwner);
+  function transferCountRelay(address newOwner) {
+    relay.transferRelay('count()', relayOwner, newOwner);
   }
 
-  function Count() {
+  function count() {
     counter++;
   }
 }

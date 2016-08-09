@@ -5,8 +5,8 @@ describe('MyContract', () => {
     const user = accounts[1]
     it('should add and get a relay for a given function and user', () => {
       const myContract = MyContract.deployed()
-      return myContract.AddCountRelay(user)
-        .then(() => myContract.GetRelay.call('Count()', user))
+      return myContract.addCountRelay(user)
+        .then(() => myContract.getRelay.call('count()', user))
     })
   })
 
@@ -14,8 +14,8 @@ describe('MyContract', () => {
     const user = accounts[1]
     it('should invoke the host function by calling the relay contract', () => {
       const myContract = MyContract.deployed()
-      return myContract.AddCountRelay(user)
-        .then(() => myContract.GetRelay.call('Count()', user))
+      return myContract.addCountRelay(user)
+        .then(() => myContract.getRelay.call('count()', user))
         .then(result => {
           const relayAddress = result.valueOf()
           return myContract.counter.call()
@@ -32,8 +32,8 @@ describe('MyContract', () => {
     const other = accounts[2]
     it('should not invoke the function for unauthorized users', () => {
       const myContract = MyContract.deployed()
-      return myContract.AddCountRelay(user)
-        .then(() => myContract.GetRelay.call('Count()', user))
+      return myContract.addCountRelay(user)
+        .then(() => myContract.getRelay.call('count()', user))
         .then(result => {
           const relayAddress = result.valueOf()
           return myContract.counter.call()
@@ -55,9 +55,9 @@ describe('MyContract', () => {
     const other = accounts[2]
     it('should transfer the relay to a new owner', () => {
       const myContract = MyContract.deployed()
-      return myContract.AddCountRelay(user)
-        myContract.TransferCountRelay(other)
-        .then(() => myContract.GetRelay.call('Count()', user))
+      return myContract.addCountRelay(user)
+        myContract.transferCountRelay(other)
+        .then(() => myContract.getRelay.call('count()', user))
         .then(result => {
           const relayAddress = result.valueOf()
           return myContract.counter.call
@@ -73,8 +73,8 @@ describe('MyContract', () => {
     const user = accounts[1]
     it('should forward sent ether to the host contract', () => {
       const myContract = MyContract.deployed()
-      return myContract.AddCountRelay(user)
-        .then(() => myContract.GetRelay.call('Count()', user))
+      return myContract.addCountRelay(user)
+        .then(() => myContract.getRelay.call('count()', user))
         .then(result => {
           const relayAddress = result.valueOf()
           const balance = web3.eth.getBalance(user).toNumber()

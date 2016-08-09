@@ -12,9 +12,9 @@ Downloading a full ethereum node and interacting with a contract via a web3-base
 
 ## Methods
 
-- `AddRelay(string methodName, address relayOwner)` - Registers the given method as callable via a relay for the given relayOwner. Creates a proxy contract in the background.
-- `GetRelay(string methodName, address relayOwner)` - Gets the address that can be sent transactions by the relayOwner to call the relay method.
-- `TransferRelay(string methodName, address oldOwner, address newOwner)` - Transfers the owner of the relay.
+- `addRelay(string methodName, address relayOwner)` - Registers the given method as callable via a relay for the given relayOwner. Creates a proxy contract in the background.
+- `getRelay(string methodName, address relayOwner)` - Gets the address that can be sent transactions by the relayOwner to call the relay method.
+- `transferRelay(string methodName, address oldOwner, address newOwner)` - Transfers the owner of the relay.
 
 ## Usage
 
@@ -29,23 +29,23 @@ contract MyContract {
   Relay.Data relay;
 
   function MyContract() {
-    relay.AddRelay('Count()', relayOwner);
+    relay.addRelay('count()', relayOwner);
   }
 
-  function GetRelay() {
-    relay.GetRelay('Count()', relayOwner);
+  function getRelay() {
+    relay.getRelay('count()', relayOwner);
   }
 
-  function Count() {
+  function count() {
     counter++;
   }
 }
 ```
 
-A client can call `GetRelay.call(methodName, relayOwner)` to get the proxy address. Sending a transaction to the proxy address will call `Count()`.
+A client can call `getRelay.call(methodName, relayOwner)` to get the proxy address. Sending a transaction to the proxy address will call `Count()`.
 
 ```js
-const proxyAddress = myContract.GetRelay.call('Count()', web3.eth.accounts[0])
+const proxyAddress = myContract.getRelay.call('Count()', web3.eth.accounts[0])
 web3.eth.sendTransaction({ from: web3.eth.accounts[0], to: proxyAddress })
 ```
 
