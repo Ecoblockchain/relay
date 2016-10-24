@@ -1,3 +1,5 @@
+pragma solidity ^0.4.2;
+
 import './Relay.sol';
 
 /* The Relay library has three methods: AddRelay, GetRelay, and TransferRelay. See Relay.sol for more details. This contract creates a relay that will allow users to trigger the Count method if they send a transaction to the proxy address (retrieved viw GetRelay('Count()'')). */
