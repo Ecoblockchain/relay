@@ -1,4 +1,4 @@
-pragma solidity ^0.4.2;
+pragma solidity ^0.4.4;
 
 /* The Relay contract serves as a base contract for any contract that wishes to expose methods through relay addresses.*/
 library Relay {
@@ -55,11 +55,6 @@ contract Proxy {
     if(msg.sender != owner) throw;
 
     // if host call throws, throw this transaction as well
-    if(!host.call(methodId)) throw;
-
-    // forward ETH to host
-    if(msg.value > 0) {
-      if(!host.send(msg.value)) throw;
-    }
+    if(!host.call.value(msg.value)(methodId)) throw;
   }
 }

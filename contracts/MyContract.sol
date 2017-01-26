@@ -1,4 +1,4 @@
-pragma solidity ^0.4.2;
+pragma solidity ^0.4.4;
 
 import './Relay.sol';
 
@@ -23,7 +23,8 @@ contract MyContract {
     relay.transferRelay('count()', relayOwner, newOwner);
   }
 
-  function count() {
+  // make payable for the purpose of testing that the relay can send ether as well
+  function count() payable {
     counter++;
   }
 }

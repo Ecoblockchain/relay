@@ -77,11 +77,17 @@ describe('MyContract', () => {
         .then(() => myContract.getRelay.call('count()', user))
         .then(result => {
           const relayAddress = result.valueOf()
-          const balance = web3.eth.getBalance(user).toNumber()
-          web3.eth.sendTransaction({ from: user, to: relayAddress, value: 100 })
-          assert.equal(web3.eth.getBalance(user).toNumber(), balance)
-          assert.equal(web3.eth.getBalance(myContract.address).toNumber(), 100)
-          assert.equal(web3.eth.getBalance(relayAddress).toNumber(), 0)
+          const balance = web3.fromWei(web3.eth.getBalance(user)).toNumber()
+          web3.eth.sendTransaction({ from: user, to: relayAddress, value: web3.toWei(10) })
+
+          // user should be -10 ETH
+          assert.equal(Math.ceil(web3.fromWei(web3.eth.getBalance(user)).toNumber()), Math.ceil(balance - 10))
+
+          // contract should be +10 ETH
+          assert.equal(Math.ceil(web3.fromWei(web3.eth.getBalance(myContract.address)).toNumber()), 10)
+
+          // relay should have 0 ETH
+          assert.equal(Math.ceil(web3.fromWei(web3.eth.getBalance(relayAddress)).toNumber()), 0)
         })
     })
   })
